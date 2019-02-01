@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
+require 'logger'
+require 'slop'
+require 'zlib'
+
+logger = Logger.new(STDOUT)
+
+opts = Slop.parse do |o|
+  o.on '--handler=', 'class to handle watch result'
+  o.on '-h', '--help', 'print help' do
+    logger.warn("\n#{o}")
+    exit(false)
+  end
+end
+
+# Dynamically require handler class from passed in handler class
+def classname_to_file(classname)
+  classname.gsub('::', '/').gsub(/([a-zA-Z])([A-Z])/, '\1_\2').downcase
+end
+require classname_to_file(opts['handler'])
+
+handler = Object.const_get(opts['handler']).new
+handler.setup_connections
+previous_data = handler.watch_fetch_json(opts['handler'])
+previous_watch_json = previous_data.nil? ? '{}' : Zlib::Inflate.inflate(previous_data)
+current_watch_json = $stdin.read
+handler.handle_watch(previous_watch_json, current_watch_json)
+handler.watch_push_json(opts['handler'], Zlib::Deflate.deflate(current_watch_json))
