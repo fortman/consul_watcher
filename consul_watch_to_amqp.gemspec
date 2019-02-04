@@ -4,13 +4,13 @@ lib = File.expand_path('lib', '..')
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
-  spec.name          = 'consul_watch_to_amqp'
+  spec.name          = 'ruby_consul_watch'
   spec.version       = IO.read('VERSION').chomp
   spec.authors       = ['Ryan Fortman']
   spec.email         = ['r.fortman.dev@gmail.com']
 
   spec.summary       = 'Send consul watch events to an amqp.'
-  spec.homepage      = 'https://github.com/fortman/consul_watch_to_amqp'
+  spec.homepage      = 'https://github.com/fortman/ruby_consul_watch'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.

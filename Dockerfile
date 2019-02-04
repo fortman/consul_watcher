@@ -5,12 +5,12 @@ ARG gem_file
 RUN apk add --no-cache jq build-base libc-dev linux-headers postgresql-dev libxml2-dev libxslt-dev ruby ruby-dev ruby-rdoc ruby-irb jq
 
 COPY ./docker-entrypoint.sh /
-COPY ./watch_handler /consul_watch_to_amqp/
-COPY ./Gemfile /consul_watch_to_amqp/
-COPY ./consul_watch_to_amqp.gemspec /consul_watch_to_amqp/
-COPY pkg/$gem_file /consul_watch_to_amqp/
+COPY ./watch_handler /ruby_consul_watch/
+COPY ./Gemfile /ruby_consul_watch/
+COPY ./ruby_consul_watch.gemspec /ruby_consul_watch/
+COPY pkg/$gem_file /ruby_consul_watch/
 
-RUN cd /consul_watch_to_amqp ; \
+RUN cd /ruby_consul_watch ; \
     gem install $gem_file
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
