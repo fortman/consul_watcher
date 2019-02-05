@@ -5,7 +5,7 @@ This gem is in a work in progress.  Currently very basic functinality implemente
 
 To run the test case locally, you will need to point to a running consul instance.  Tokens/acl support not implemented yet, so it will have to be a consul instance with open anonymous access.  Update bin/test.sh and edit CONSUL_HTTP_ADDR
 
-You will need to have ruby and jq installed and availabe in your path.  I'll work to make 'bundle install' work as my next task.  Once all gems are installed, you should be able to run bin/test.sh and you will see the json diff with the previous watch data.  The idea will be to push that diff to a data sync, with the first implementation being an amqp exchange.  The work has been slow as I've been since, so the next update might not be for a week or two.
+You will need to have ruby and jq installed and availabe in your path.  I'll make 'bundle install' work as my next task.  Once all gems are installed, you should be able to run bin/test.sh and you will see the json diff with the previous watch data.  The idea will be to push that diff to a data sync, with the first implementation being an amqp exchange.  The work has been slow as I've been sick, so the next update might not be for a week or two.
 
 # ConsulWatchToAmqp
 
