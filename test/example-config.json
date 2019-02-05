@@ -1,0 +1,12 @@
+{
+  "storage": {
+    "classname": "RubyConsulWatch::Storage::Disk"
+  },
+  "parser": {
+    "classname": "RubyConsulWatch::Parser::JsonDiff",
+    "honor_indices": false
+  },
+  "data_destination": {
+    "classname": "RubyConsulWatch::DataDestination::Jq"
+  }
+}

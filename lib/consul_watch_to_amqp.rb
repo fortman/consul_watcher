@@ -1,3 +1,0 @@
-module ConsulWatchToAmqp
-  # Your code goes here...
-end

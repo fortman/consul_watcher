@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
+require 'slop'
+require 'logger'
+require 'json'
+require 'ruby_consul_watch'
+
+logger = Logger.new(STDOUT)
+
+opts = Slop.parse do |o|
+  o.string '--watch-name', required: true
+  o.string '--config-file', required: true
+  o.on '-h', '--help', 'print help' do
+    logger.warn("\n#{o}")
+    exit(false)
+  end
+end
+
+config = JSON.parse(File.read(opts['config-file']))
+
+RubyConsulWatch.watch(opts['watch-name'], config)
