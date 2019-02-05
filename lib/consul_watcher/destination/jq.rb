@@ -1,8 +1,10 @@
 # frozen_string_literal: true
+
 require 'open3'
 
-module RubyConsulWatch
-  module DataDestination
+module ConsulWatcher
+  module Destination
+    # Send diff output to jq command line
     class Jq
       def initialize(destination_config)
       end
@@ -16,6 +18,7 @@ module RubyConsulWatch
           puts stdout.read
           stdout.close
           puts error unless wait_thr.value.success?
+          puts
         end
       end
     end

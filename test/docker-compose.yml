@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  consul:
+    image: "consul:latest"
+    ports:
+      - "8500:8500"
+  rabbitmq:
+    image: "rabbitmq:3.7-management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  consul-watcher:
+    image: "consul_watcher:latest"
+    depends_on:
+      - consul
+      - rabbitmq
+    volumes:
+      - type: bind
+        source: /tmp/data
+        target: /tmp/data
+      - type: bind
+        source: ./example-config.json
+        target: /etc/consul_watch/config.json
+        read_only: true
+    env_file: ./test-env.vars 
+    #environment:
+      #CONSUL_HTTP_ADDR: "http://192.168.33.10:8500"
+      #WATCH_ARGS: "--type keyprefix --prefix /"
+      #WATCH_ARGS: "--type checks"
+      #WATCH_SCRIPT: "/usr/bin/consul_watch --config-file /etc/consul_watch/config.json --storage-name testing --watch-type checks"
+

@@ -1,12 +1,16 @@
 {
   "storage": {
-    "classname": "RubyConsulWatch::Storage::Disk"
+    "classname": "ConsulWatcher::Storage::Disk",
+    "storage_parent_dir": "/tmp/data"
   },
-  "parser": {
-    "classname": "RubyConsulWatch::Parser::JsonDiff",
+  "watch_type": {
+    "classname": "ConsulWatcher::WatchType::Key",
     "honor_indices": false
   },
-  "data_destination": {
-    "classname": "RubyConsulWatch::DataDestination::Jq"
+  "destination": {
+    "classname": "ConsulWatcher::Destination::Amqp",
+    "rabbitmq": {
+      "server": "rabbitmq"
+    }
   }
 }

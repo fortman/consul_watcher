@@ -9,7 +9,7 @@ You will need to have ruby and jq installed and availabe in your path.  I'll mak
 
 # ConsulWatchToAmqp
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/ruby_consul_watch`. To experiment with that code, run `bin/console` for an interactive prompt.
+Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/consul_watcher`. To experiment with that code, run `bin/console` for an interactive prompt.
 
 TODO: Delete this and the text above, and describe your gem
 
@@ -18,7 +18,7 @@ TODO: Delete this and the text above, and describe your gem
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'ruby_consul_watch'
+gem 'consul_watcher'
 ```
 
 And then execute:
@@ -27,7 +27,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install ruby_consul_watch
+    $ gem install consul_watcher
 
 ## Usage
 
@@ -41,4 +41,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/ruby_consul_watch.
+Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/consul_watcher.

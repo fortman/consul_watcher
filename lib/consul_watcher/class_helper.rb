@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module RubyConsulWatch
+module ConsulWatcher
   # Define methods to handle default initialization behavior
   module ClassHelper
     def populate_variables(config = {})

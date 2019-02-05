@@ -5,12 +5,13 @@
 require 'slop'
 require 'logger'
 require 'json'
-require 'ruby_consul_watch'
+require 'consul_watcher'
 
 logger = Logger.new(STDOUT)
 
 opts = Slop.parse do |o|
-  o.string '--watch-name', required: true
+  o.string '--watch-type', required: true
+  o.string '--storage-name', required: true
   o.string '--config-file', required: true
   o.on '-h', '--help', 'print help' do
     logger.warn("\n#{o}")
@@ -20,4 +21,4 @@ end
 
 config = JSON.parse(File.read(opts['config-file']))
 
-RubyConsulWatch.watch(opts['watch-name'], config)
+ConsulWatcher.watch(opts['watch-type'], opts['storage-name'], config)
