@@ -1,3 +1,6 @@
+# NOTICE
+This gem is in a work in progress.  Currently very basic functinality implemented, and not working as expected yet.  TODO includes design and use docs.
+
 # ConsulWatchToAmqp
 
 Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/ruby_consul_watch`. To experiment with that code, run `bin/console` for an interactive prompt.
