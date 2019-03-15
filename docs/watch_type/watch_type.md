@@ -1,0 +1,7 @@
+# watch_type classes
+The watch_type classes have a few different functions.  The first and main function is to create a json diff between consul watch runs.  This diff will later be sent to a [destination class](https://github.com/fortman/consul_watcher/blob/master/docs/destination/destination.md).  The second purpose of this class is to do some data translation.  The consul watch json output is not ideal for doing a diff.  A good example is that arrays in the output are un-ordered, and between runs can change position.  This causes things to appear to have changed, when really all they did was change their order in the array.  To get around this, the watch_type classes strive to obscure these non-changes and provide a good json format for diffs.
+
+## key and keyprefix
+Key and keyprefix have identical output format, so they will share a [watch_type class named key](https://github.com/fortman/consul_watcher/blob/master/lib/consul_watcher/watch_type/key.rb).  Configuration is driven by the consul_watcher configuration file and [key specific configuration](https://github.com/fortman/consul_watcher/blob/master/docs/watch_type/key.md).  
+
+## More to come later, there will need to be watch_type for every single `consul watch --type`
