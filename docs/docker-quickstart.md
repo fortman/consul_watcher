@@ -2,14 +2,14 @@
 
 The easiest way to get started with consul_watcher is with the docker image.  The docker entry point will run a consul watch and then pipe the output to the ruby consul_watcher program.  The behavior is mostly driven by passing environmental variables into docker.  Environmental variables, command line parameters and a configuration file are being tested to determine which is best way to configure consul_watch.  There is a docker compose file to test things out locally  The following steps should have you working with a local cluster fairly quick.  A rake task will be created to automate these steps at some point.
 
-From the root of the git repository execute the following
-:> docker-compose --file test/docker-compose.yml up --no-start
-:> docker-compose --file test/docker-compose.yml start consul rabbitmq
-Wait a bit of time for those services to start.  30 seconds should suffice.
-Login to rabbitmq locally [http://localhost:15672]. Use guest/guest as password.  
-Create a queue and bind it to the amq.topic exchange.  Use routing key `consul_watcher.key.#` for the bind.
-:> docker-compose --file test/docker-compose.yml start consul-watcher
-Login to consul locally [http://localhost:8500].  You should be able to start creating, updating and deleting entries in the kv store.  You should start to see messages in the queue
+From the root of the git repository execute the following<br/>
+:> docker-compose --file test/docker-compose.yml up --no-start<br/>
+:> docker-compose --file test/docker-compose.yml start consul rabbitmq<br/>
+Wait a bit of time for those services to start.  30 seconds should suffice.<br/>
+Login to rabbitmq locally [http://localhost:15672]. Use guest/guest as password.  <br/>
+Create a queue and bind it to the amq.topic exchange.  Use routing key `consul_watcher.key.#` for the bind.<br/>
+:> docker-compose --file test/docker-compose.yml start consul-watcher<br/>
+Login to consul locally [http://localhost:8500].  You should be able to start creating, updating and deleting entries in the kv store.  You should start to see messages in the queue<br/>
 
 # environmental variables used by docker image
 | environment variable | description                                                         | example value                                                                                               |
