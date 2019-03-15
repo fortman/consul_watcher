@@ -19,7 +19,7 @@ After the watch_type class handles the data, it will create a json diff between 
 ## Quick start guide
 The quickest and easiest way to get started is to follow the [docker quickstart](https://github.com/fortman/consul_watcher/blob/master/docs/docker-quickstart.md).
 
-If you are planning to write your own extension for storage/watch_type/destination, then you can check out the [ruby quickstart](https://github.com/fortman/consul_watcher/blob/master/docs/docker-quickstart.md).
+If you are planning to write your own extension for storage/watch_type/destination, then you can check out the [ruby quickstart](https://github.com/fortman/consul_watcher/blob/master/docs/ruby-quickstart.md).
 
 ## Development
 Please read the [general design documentation](https://github.com/fortman/consul_watcher/blob/master/docs/general_design.md).  More detailed architectual documenation will be created in the future.  All development [build and test commands](https://github.com/fortman/consul_watcher/blob/master/docs/rake_tasks.md) are defined as rake tasks.

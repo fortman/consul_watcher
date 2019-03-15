@@ -3,20 +3,20 @@
 The easiest way to get started with consul_watcher is with the docker image.  The docker entry point will run a consul watch and then pipe the output to the ruby consul_watcher program.  The behavior is mostly driven by passing environmental variables into docker.  Environmental variables, command line parameters and a configuration file are being tested to determine which is best way to configure consul_watch.  There is a docker compose file to test things out locally  The following steps should have you working with a local cluster fairly quick.  A rake task will be created to automate these steps at some point.
 
 From the root of the git repository execute the following<br/>
-:> docker-compose --file test/docker-compose.yml up --no-start<br/>
-:> docker-compose --file test/docker-compose.yml start consul rabbitmq<br/>
+:> `docker-compose --file test/docker-compose.yml up --no-start`<br/>
+:> `docker-compose --file test/docker-compose.yml start consul rabbitmq`<br/>
 Wait a bit of time for those services to start.  30 seconds should suffice.<br/>
-Login to rabbitmq locally [http://localhost:15672]. Use guest/guest as password.  <br/>
+Login to rabbitmq locally http://localhost:15672. Use guest/guest as password.  <br/>
 Create a queue and bind it to the amq.topic exchange.  Use routing key `consul_watcher.key.#` for the bind.<br/>
-:> docker-compose --file test/docker-compose.yml start consul-watcher<br/>
-Login to consul locally [http://localhost:8500].  You should be able to start creating, updating and deleting entries in the kv store.  You should start to see messages in the queue<br/>
+:> `docker-compose --file test/docker-compose.yml start consul-watcher`<br/>
+Login to consul locally http://localhost:8500.  You should be able to start creating, updating and deleting entries in the kv store.  Go back to rabbitmq and you should be seeing messages in the queue you created.<br/>
 
 # environmental variables used by docker image
 | environment variable | description                                                         | example value                                                                                               |
 | -------------------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | WATCH_ARGS           | arguments passed into the consul watch command                      | --type keyprefix --prefix /                                                                                 |
 | WATCH_SCRIPT         | the output of the consul watch is piped to this command             | /usr/bin/consul_watcher --config-file /etc/consul_watch/config.json --storage-name testing --watch-type key |
-| RUN_ONCE             | determins if the consul watch runs once, or multiple times          | true|false                                                                                                  |
+| RUN_ONCE             | determins if the consul watch runs once, or multiple times          | set to any string to enable `run once` mode.  Unset/empty string means run continuously                     |
 | CONSUL_HTTP_ADDR     | used by consul, any consul environmental variables can be specified | http://localhost:8500                                                                                       |
 
 ## consul_watcher command line arguments
