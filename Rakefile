@@ -5,30 +5,36 @@ require 'open3'
 
 spec_file = Gem::Specification.load('consul_watcher.gemspec')
 
-task default: :docker
+task default: :docker_build
 
 task :docker_tag, [:version, :docker_image_id] do |_task, args|
-  puts "Docker id #{args['docker_image_id']} => tag consul_watcher:#{args['version']}"
-  tag_cmd = "docker tag #{args['docker_image_id']} consul_watcher:#{args['version']}"
+  puts "Docker id #{args['docker_image_id']} => tag rfortman/consul_watcher:#{args['version']}"
+  tag_cmd = "docker tag #{args['docker_image_id']} rfortman/consul_watcher:#{args['version']}"
   Open3.popen3(tag_cmd) do |_stdin, _stdout, stderr, wait_thr|
     error = stderr.read
     puts error unless wait_thr.value.success?
   end
 end
 
-task docker: [:build] do
+task docker_build: [:build] do
+  docker_image_id = nil
   build_cmd = "docker build --build-arg gem_file=consul_watcher-#{spec_file.version}.gem ."
+  threads = []
   Open3.popen3(build_cmd) do |_stdin, stdout, stderr, wait_thr|
-    output = stdout.read
-    error = stderr.read
+    { out: stdout, err: stderr }.each do |key, stream|
+      threads << Thread.new do
+        until (raw_line = stream.gets).nil?
+          match = raw_line.match(/Successfully built (.*)$/i)
+          docker_image_id = match.captures[0] if match
+          puts raw_line.to_s
+        end
+      end
+    end
+    threads.each(&:join)
     if wait_thr.value.success?
-      docker_image_id = output.match(/Successfully built (.*)$/i).captures[0]
-      puts "#{output}\n"
       Rake::Task['docker_tag'].invoke(spec_file.version, docker_image_id)
       Rake::Task['docker_tag'].reenable
       Rake::Task['docker_tag'].invoke('latest', docker_image_id)
-    else
-      puts error
     end
   end
 end

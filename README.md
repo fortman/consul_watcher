@@ -1,6 +1,9 @@
 # NOTICE
 This gem is a work in progress.  Please see the [TODO](https://github.com/fortman/consul_watcher/blob/master/docs/TODO.md) documentation
 
+## First 0.0.1 release.  Partial functionality
+- [ruby gem](https://rubygems.org/gems/consul_watcher)
+- [docker image](https://cloud.docker.com/repository/docker/rfortman/consul_watcher)
 
 ## Note on naming
 This project name is a little confusing in that it called `consul_watcher`.  It is wrapping the `consul watch` command line tool from Hashicorp.  To avoid confusion, this project in the context of both the docker image and ruby gem will be referred to as `consul_watcher`.  Any time that `consul watch` is used, that is a reference to the actualy Hashicorp command.
