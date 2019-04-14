@@ -17,7 +17,7 @@ module ConsulWatcher
     previous_watch_json = storage.fetch(storage_name)
     changes = watch_type.get_changes(previous_watch_json, current_watch_json)
     changes.each do |change|
-      destination.send(JSON.pretty_generate(change), watch_type.amqp_routing_key(change))
+      destination.send(change)
     end
     storage.push(storage_name, current_watch_json)
   end

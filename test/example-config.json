@@ -8,9 +8,6 @@
     "honor_indices": false
   },
   "destination": {
-    "classname": "ConsulWatcher::Destination::Amqp",
-    "rabbitmq": {
-      "server": "rabbitmq"
-    }
+    "classname": "ConsulWatcher::Destination::Jq"
   }
 }

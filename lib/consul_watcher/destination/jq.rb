@@ -9,9 +9,10 @@ module ConsulWatcher
       def initialize(destination_config)
       end
 
-      def send(data)
+      def send(change)
+        change_json = JSON.pretty_generate(change)
         Open3.popen3("/usr/bin/env jq '.'") do |stdin, stdout, stderr, wait_thr|
-          stdin.puts "#{data}\r\n"
+          stdin.puts "#{change_json}\r\n"
           stdin.close
           error = stderr.read
           stderr.close

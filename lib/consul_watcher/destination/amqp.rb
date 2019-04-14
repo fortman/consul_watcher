@@ -20,9 +20,9 @@ module ConsulWatcher
                                   durable: true)
       end
 
-      def send(change, routing_key)
+      def send(change)
         puts 'publishing message'
-        @ex.publish(change, routing_key: "consul_watcher.#{routing_key}")
+        @ex.publish(change, routing_key: "consul_watcher.#{change['id']}")
       end
     end
   end

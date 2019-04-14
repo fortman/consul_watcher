@@ -13,6 +13,10 @@ module ConsulWatcher
                       array_path: true)
       end
 
+      def id(change)
+        "key.#{change[1][0].tr('/', '.')}"
+      end
+
       def json_to_hash(json)
         json = '{}' if json.nil? || json == "null\n"
         JSON.parse(json).map do |check|
