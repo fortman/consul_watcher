@@ -10,8 +10,6 @@ require 'consul_watcher'
 logger = Logger.new(STDOUT)
 
 opts = Slop.parse do |o|
-  o.string '--watch-type', required: true
-  o.string '--storage-name', required: true
   o.string '--config-file', required: true
   o.on '-h', '--help', 'print help' do
     logger.warn("\n#{o}")
@@ -21,4 +19,5 @@ end
 
 config = JSON.parse(File.read(opts['config-file']))
 
-ConsulWatcher.watch(opts['watch-type'], opts['storage-name'], config)
+# ConsulWatcher.watch(opts['watch-type'], config)
+ConsulWatcher.watch(config)

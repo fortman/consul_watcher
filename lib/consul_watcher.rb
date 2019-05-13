@@ -4,38 +4,48 @@
 
 require 'json'
 require 'hashdiff'
+require 'consul_watcher/filters'
 
 # Top Level module to run watch logic
 module ConsulWatcher
-  def self.watch(watch_type, storage_name, config)
-    storage = get_storage(config['storage']) if config['storage']
-    watch_type = get_watch_type(config['watch_type']) if config['watch_type']
-    filters = get_filters(config['filters']) if config['filters']
-    destination = get_destination(config['destination']) if config['destination']
-
+  def self.watch(config)
+    #Encoding.default_external = Encoding::UTF_8
+    #Encoding.default_external = Encoding::ASCII_8BIT
+    assemble(config)
     current_watch_json = $stdin.read
-    previous_watch_json = storage.fetch(storage_name)
-    changes = watch_type.get_changes(previous_watch_json, current_watch_json)
+    previous_watch_json = @storage.fetch
+    changes = @watch_type.get_changes(previous_watch_json, current_watch_json)
     changes.each do |change|
-      destination.send(change)
+      @destination.send(change)
     end
-    storage.push(storage_name, current_watch_json)
+    @storage.push(current_watch_json) unless changes.empty?
+  end
+
+  private
+
+  def self.assemble(config)
+    @storage = get_storage(config['storage'])
+    @watch_type = get_watch_type(config['watch_type'])
+    @destination = get_destination(config['destination'])
+    
+    @watch_type.filters = ConsulWatcher::Filters.new(config['watch_type'] || {})
+    @watch_type.filters.add_filters(@storage.get_filters)
   end
 
   def self.get_storage(storage_config)
-    classname = storage_config['classname'] || 'ConsulWatcher::Storage::Disk'
+    classname = storage_config['classname']
     require classname_to_file(classname)
     Object.const_get(classname).new(storage_config)
   end
 
   def self.get_watch_type(watch_type_config)
-    classname = watch_type_config['classname'] || 'ConsulWatcher::WatchType::Checks'
+    classname = watch_type_config['classname']
     require classname_to_file(classname)
     Object.const_get(classname).new(watch_type_config)
   end
 
   def self.get_destination(destination_config)
-    classname = destination_config['classname'] || 'ConsulWatcher::Destination::Jq'
+    classname = destination_config['classname']
     require classname_to_file(classname)
     Object.const_get(classname).new(destination_config)
   end

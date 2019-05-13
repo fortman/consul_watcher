@@ -13,6 +13,7 @@ This git project produces a docker image.  The basic premise of this docker imag
 * parse the json output of the [consul watch](https://www.consul.io/docs/commands/watch.html) command
 * compare the output to the previous consul watch output
 * send the diff to a destination
+
 The primary destination at this time is an AMQP topic exchange.  The underlying logic in the docker image is a ruby gem.  To make the gem modular and extensible, the functionality has been broken up into 3 sections; storage, watch_type, and destination.
 
 If we want to do a diff of consul watches, we need to store the previous consul watch json.  This is because consul watches kick off new executions on every change, so we can't store the previous run in memory.  Storage is accomplished with [storage classes](https://github.com/fortman/consul_watcher/blob/master/docs/storage/storage.md).  The purpose of the storage class is to just store and retrieve previous consul watch json.  At this time, backend storage is planned for both local filesystem, and consul kv storage.

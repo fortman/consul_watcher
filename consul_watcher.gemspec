@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   # spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_runtime_dependency 'bundler', '~> 2.0'
+  spec.add_runtime_dependency 'diplomat', '~> 2.2.4'
   spec.add_dependency 'bunny', '~> 1.7.0'
   spec.add_dependency 'hashdiff', '~> 0.3'
   spec.add_dependency 'slop', '~> 4.6'

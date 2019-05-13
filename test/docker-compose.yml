@@ -11,13 +11,13 @@ services:
       - "15672:15672"
 
   consul-watcher:
-    image: "consul_watcher:latest"
+    image: "rfortman/consul_watcher:latest"
     depends_on:
       - consul
       - rabbitmq
     volumes:
       - type: bind
-        source: /tmp/data
+        source: ./data
         target: /tmp/data
       - type: bind
         source: ./example-config.json

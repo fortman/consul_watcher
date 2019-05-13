@@ -1,13 +1,15 @@
 {
   "storage": {
-    "classname": "ConsulWatcher::Storage::Disk",
-    "storage_parent_dir": "/tmp/data"
+    "storage_name": "testing",
+    "classname": "ConsulWatcher::Storage::Consul"
   },
   "watch_type": {
     "classname": "ConsulWatcher::WatchType::Key",
-    "honor_indices": false
+    "filters": {
+      "key_property": "ModifyIndex"
+    }
   },
   "destination": {
-    "classname": "ConsulWatcher::Destination::Jq"
+    "classname": "ConsulWatcher::Destination::Amqp"
   }
 }
