@@ -15,6 +15,7 @@ module ConsulWatcher
     current_watch_json = $stdin.read
     previous_watch_json = @storage.fetch
     changes = @watch_type.get_changes(previous_watch_json, current_watch_json)
+    # @watch_type.filters.print_filters
     changes.each do |change|
       @destination.send(change)
     end

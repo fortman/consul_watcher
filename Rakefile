@@ -2,63 +2,57 @@
 
 require 'bundler/gem_tasks'
 require 'open3'
-require_relative 'lib/consul_watcher/rake_helper'
+require 'flazm_ruby_helpers/os'
+require 'flazm_ruby_helpers/project'
+require_relative 'test/lib/rake_helper'
 
 spec_file = Gem::Specification.load('consul_watcher.gemspec')
 
 task default: :docker_build
 
-task :docker_tag, [:version, :docker_image_id] do |_task, args|
-  puts "Docker id #{args['docker_image_id']} => tag rfortman/consul_watcher:#{args['version']}"
-  tag_cmd = "docker tag #{args['docker_image_id']} rfortman/consul_watcher:#{args['version']}"
-  Open3.popen3(tag_cmd) do |_stdin, _stdout, stderr, wait_thr|
-    error = stderr.read
-    puts error unless wait_thr.value.success?
-  end
-end
-
 task docker_build: [:build] do
-  docker_image_id = nil
   build_cmd = "docker build --build-arg gem_file=consul_watcher-#{spec_file.version}.gem ."
-  threads = []
-  Open3.popen3(build_cmd) do |_stdin, stdout, stderr, wait_thr|
-    { out: stdout, err: stderr }.each do |key, stream|
-      threads << Thread.new do
-        until (raw_line = stream.gets).nil?
-          match = raw_line.match(/Successfully built (.*)$/i)
-          docker_image_id = match.captures[0] if match
-          puts raw_line.to_s
-        end
-      end
-    end
-    threads.each(&:join)
-    if wait_thr.value.success?
-      Rake::Task['docker_tag'].invoke(spec_file.version, docker_image_id)
-      Rake::Task['docker_tag'].reenable
-      Rake::Task['docker_tag'].invoke('latest', docker_image_id)
-    end
-  end
+  image_id = FlazmRubyHelpers::Project::Docker.build(build_cmd)
+  FlazmRubyHelpers::Project::Docker.tag(spec_file.metadata['docker_image_name'],
+                                        spec_file.version,
+                                        image_id)
+  FlazmRubyHelpers::Project::Docker.tag(spec_file.metadata['docker_image_name'],
+                                        'latest',
+                                        image_id)
 end
 
 task :start_deps do
   cmd = 'docker-compose --file test/docker-compose.yml up -d consul rabbitmq'
-  ConsulWatcher::RakeHelper.exec(cmd)
+  FlazmRubyHelpers::Os.exec(cmd)
   urls = [
     'http://localhost:8500/v1/status/leader',
     'http://localhost:15672'
   ]
-  ConsulWatcher::RakeHelper.wait_for_urls(urls)
-  ConsulWatcher::RakeHelper.config_rabbitmq
+  FlazmRubyHelpers::Http.wait_for_urls(urls)
 end
 
 task up: [:start_deps] do
-  cmd = 'docker-compose --file test/docker-compose.yml up -d consul-watcher'
-  _output, _status = ConsulWatcher::RakeHelper.exec(cmd)
+  _output, _success = FlazmRubyHelpers::Os.exec('docker-compose --file test/docker-compose.yml up -d consul-watcher')
+end
+
+task :consume do
+  ConsulWatcher::RakeHelper.config_rabbitmq
   puts 'Starting queue consumer'
   ConsulWatcher::RakeHelper.consumer_start
 end
 
 task :down do
-  cmd = 'docker-compose --file test/docker-compose.yml down'
-  _output, _status = ConsulWatcher::RakeHelper.exec(cmd)
+  _output, _success = FlazmRubyHelpers::Os.exec('docker-compose --file test/docker-compose.yml down')
+end
+
+task publish: [:build, :docker_build] do
+  FlazmRubyHelpers::Project::Git.publish(spec_file.version.to_s, 'origin', 'master')
+  FlazmRubyHelpers::Project::Docker.publish(spec_file.metadata['docker_image_name'], spec_file.version.to_s)
+  FlazmRubyHelpers::Project::Gem.publish(spec_file.name.to_s, spec_file.version.to_s)
+end
+
+task :unpublish do
+  _output, _success = FlazmRubyHelpers::Os.exec("git tag --delete #{spec_file.version.to_s}")
+  _output, _success = FlazmRubyHelpers::Os.exec("gem yank #{spec_file.name.to_s} -v #{spec_file.version.to_s}")
+  puts "Please delete the tag from dockerhub at https://cloud.docker.com/repository/registry-1.docker.io/#{spec_file.metadata['docker_image_name']}/tags"
 end

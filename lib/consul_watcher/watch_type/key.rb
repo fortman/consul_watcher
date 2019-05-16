@@ -22,6 +22,7 @@ module ConsulWatcher
           formatted_change
         end.compact
         changes = changes.each.collect.reject {|change| @filters.filter?(change)}
+        puts "size: #{changes.size}"
         changes
       end
 

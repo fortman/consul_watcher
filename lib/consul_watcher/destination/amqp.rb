@@ -16,17 +16,30 @@ module ConsulWatcher
       end
 
       def setup_rabbitmq
-        @conn = Bunny.new(host: @rabbitmq_server,
-                          port: @rabbitmq_port,
-                          vhost: @rabbitmq_vhost,
-                          username: @rabbitmq_username,
-                          password: @rabbitmq_password)
+        @conn = Bunny.new(rabbitmq_opts)
         @conn.start
         @ch = @conn.create_channel
         @ex = Bunny::Exchange.new(@ch,
                                   :topic,
                                   @rabbitmq_exchange,
                                   durable: true)
+      end
+
+      def rabbitmq_opts
+        opts = {}
+        opts[:vhost] = @rabbitmq_vhost
+        opts[:username] = @rabbitmq_username
+        opts[:password] = @rabbitmq_password
+        if @rabbitmq_addresses
+          opts[:addresses] = @rabbitmq_addresses
+        elsif @rabbitmq_hosts
+          opts[:hosts] = @rabbitmq_hosts
+          opts[:port] = @rabbitmq_port if @rabbitmq_port
+        elsif @rabbitmq_host
+          opts[:host] = @rabbitmq_host
+          opts[:port] = @rabbitmq_port if @rabbitmq_port
+        end
+        opts
       end
 
       def send(change)
@@ -47,7 +60,12 @@ module ConsulWatcher
         logger.level = Logger::DEBUG
         {
           logger: logger,
-          rabbitmq_server: 'localhost',
+          #rabbitmq_host: nil,
+          rabbitmq_host: 'rabbitmq',
+          #rabbitmq_hosts: ['rabbitmq', 'localhost'],
+          #rabbitmq_host: 'localhost',
+          #rabbitmq_hosts: nil,
+          rabbitmq_addresses: nil,
           rabbitmq_port: '5672',
           rabbitmq_vhost: '/',
           rabbitmq_username: 'guest',

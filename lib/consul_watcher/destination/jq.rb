@@ -31,14 +31,9 @@ module ConsulWatcher
         logger = Logger.new(STDOUT)
         logger.level = Logger::INFO
         {
-          logger: logger,
-          rabbitmq_server: 'localhost',
-          rabbitmq_port: '5672',
-          rabbitmq_vhost: '/',
-          rabbitmq_username: 'guest',
-          rabbitmq_password: 'guest',
-          rabbitmq_exchange: 'amq.topic'
+          logger: logger
         }
+      end
     end
   end
 end

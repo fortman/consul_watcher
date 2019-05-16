@@ -11,18 +11,27 @@ module ConsulWatcher
     end
 
     def add_filters(filters_to_add)
-      @filters.merge!(filters_to_add)
+      @filters = @filters.deep_merge(filters_to_add)
     end
 
     def filter?(change)
-      @filters.each do |attribute, regex|
-        match = change.key?(attribute) ? change[attribute].match?(/#{regex}/) : false
+      @filters.each do |attribute, regexs|
+        next unless change.key?(attribute) && !change[attribute].nil?
+
+        match = match?(change[attribute], regexs)
         if match
-          @logger.debug("filtered #{change['id']} #{attribute} on regex #{regex}")
-          return true 
+          @logger.debug("filtered #{attribute} '#{change[attribute]}' against regular expressions #{regexs}")
+          return true
         end
       end
       false
+    end
+
+    def match?(value, regexs)
+      results = regexs.each.collect do |regex|
+        value.match?(/#{regex}/)
+      end
+      results.any?
     end
 
     def print_filters
@@ -35,7 +44,7 @@ module ConsulWatcher
 
     def defaults
       logger = Logger.new(STDOUT)
-      logger.level = Logger::WARN
+      logger.level = Logger::DEBUG
       {
         logger: logger,
         filters: {}

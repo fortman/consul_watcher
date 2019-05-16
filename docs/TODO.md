@@ -12,11 +12,12 @@
 | PROP        | proposed                                     |
 
 ## High level tasks
-| task                               | status |
-|:---------------------------------- |:------ |
-| Create documentation               | IP     |
-| Publish docker image and ruby gem  | IP     |
-| Write unit tests                   | PL     |
+| task                                         | status |
+|:-------------------------------------------- |:------ |
+| Create documentation                         | IP     |
+| Publish docker image and ruby gem            | IP     |
+| Write unit tests                             | PL     |
+| Write super classes for shared functionality | PL     |
 
 ## Functional ruby classes implementation
 
@@ -33,10 +34,10 @@
 | ---------------- |:----------- |
 | key/keyprefix    | FUNC        |
 | checks           | IP          |
-| services         | planned     |
-| service          | planned     |
-| nodes            | planned     |
-| event            | planned     |
+| services         | PL          |
+| service          | PL          |
+| nodes            | PL          |
+| event            | PL          |
 
 #### Destination class implementation status
 

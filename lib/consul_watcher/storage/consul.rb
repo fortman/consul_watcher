@@ -31,7 +31,7 @@ module ConsulWatcher
       end
 
       def get_filters
-        { 'key_path' => cache_file_name }
+        { 'key_path' => [ cache_file_name ] }
       end
 
       private
