@@ -12,6 +12,6 @@
   },
   "destination": {
     "classname": "ConsulWatcher::Destination::Amqp",
-    "rabbitmq_host": "rabbitmq"
+    "rabbitmq_hosts": [ "rabbitmq1", "rabbitmq" ]
   }
 }

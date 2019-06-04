@@ -4,6 +4,7 @@ require 'bundler/gem_tasks'
 require 'open3'
 require 'flazm_ruby_helpers/os'
 require 'flazm_ruby_helpers/project'
+require 'flazm_ruby_helpers/http'
 require_relative 'test/lib/rake_helper'
 
 spec_file = Gem::Specification.load('consul_watcher.gemspec')
@@ -48,6 +49,7 @@ end
 task publish: [:build, :docker_build] do
   FlazmRubyHelpers::Project::Git.publish(spec_file.version.to_s, 'origin', 'master')
   FlazmRubyHelpers::Project::Docker.publish(spec_file.metadata['docker_image_name'], spec_file.version.to_s)
+  FlazmRubyHelpers::Project::Docker.publish(spec_file.metadata['docker_image_name'], 'latest')
   FlazmRubyHelpers::Project::Gem.publish(spec_file.name.to_s, spec_file.version.to_s)
 end
 

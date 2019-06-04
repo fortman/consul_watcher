@@ -60,11 +60,8 @@ module ConsulWatcher
         logger.level = Logger::DEBUG
         {
           logger: logger,
-          #rabbitmq_host: nil,
-          rabbitmq_host: 'rabbitmq',
-          #rabbitmq_hosts: ['rabbitmq', 'localhost'],
-          #rabbitmq_host: 'localhost',
-          #rabbitmq_hosts: nil,
+          rabbitmq_host: nil,
+          rabbitmq_hosts: nil,
           rabbitmq_addresses: nil,
           rabbitmq_port: '5672',
           rabbitmq_vhost: '/',

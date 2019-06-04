@@ -26,6 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'flazm_ruby_helpers', '~> 0.0.1'
   spec.add_runtime_dependency 'bunny', '~> 1.7.0'
   spec.add_runtime_dependency 'diplomat', '~> 2.2.4'
-  spec.add_runtime_dependency 'hashdiff', '~> 0.3'
+  spec.add_runtime_dependency 'hashdiff', '= 0.3.9'
   spec.add_runtime_dependency 'slop', '~> 4.6'
 end
