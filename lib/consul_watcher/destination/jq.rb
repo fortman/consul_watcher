@@ -2,13 +2,14 @@
 
 require 'open3'
 require 'logger'
+require 'flazm_ruby_helpers/class'
 
 module ConsulWatcher
   module Destination
     # Send diff output to jq command line
     class Jq
       def initialize(destination_config)
-        populate_variables(destination_config)
+        initialize_variables(destination_config)
       end
 
       def send(change)

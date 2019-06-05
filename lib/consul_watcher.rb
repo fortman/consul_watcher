@@ -9,16 +9,16 @@ require 'consul_watcher/filters'
 # Top Level module to run watch logic
 module ConsulWatcher
   def self.watch(config)
-    #Encoding.default_external = Encoding::UTF_8
-    #Encoding.default_external = Encoding::ASCII_8BIT
+    logger = Logger.new(STDOUT)
+    logger.level = Logger::INFO
     assemble(config)
     current_watch_json = $stdin.read
     previous_watch_json = @storage.fetch
     changes = @watch_type.get_changes(previous_watch_json, current_watch_json)
-    # @watch_type.filters.print_filters
     changes.each do |change|
       @destination.send(change)
     end
+    logger.info("Processed #{changes.size} change#{'s' unless changes.size == 1}")
     @storage.push(current_watch_json) unless changes.empty?
   end
 

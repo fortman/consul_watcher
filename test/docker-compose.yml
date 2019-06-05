@@ -20,7 +20,7 @@ services:
         source: ./data
         target: /tmp/data
       - type: bind
-        source: ./example-config.json
+        source: ./example-config-disk.json
         target: /etc/consul_watch/config.json
         read_only: true
     env_file: ./test-env.vars 

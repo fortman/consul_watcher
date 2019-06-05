@@ -45,3 +45,5 @@
 | ----------------- |:----------- |
 | AMQP              | FUNC        |
 | JQ                | FUNC        |
+
+# Change filter to be whitelist/blacklist

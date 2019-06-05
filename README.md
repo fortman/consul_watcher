@@ -1,5 +1,5 @@
 # NOTICE
-This gem is a work in progress.  Please see the [TODO](https://github.com/fortman/consul_watcher/blob/master/docs/TODO.md) documentation
+This gem is a work in progress.  0.0.x versions are considered to be in ALPHA state where functionality will vary greatly between versions.  0.1.0 will be the first BETA relese and will come with better backwards compatibility guarentees.  Please see the [TODO](https://github.com/fortman/consul_watcher/blob/master/docs/TODO.md) documentation
 
 ## First 0.0.1 release.  Partial functionality
 - [ruby gem](https://rubygems.org/gems/consul_watcher)

@@ -1,25 +1,25 @@
 # frozen_string_literal: true
 
 require 'diplomat'
-require 'consul_watcher/class_helper'
 require 'zlib'
+require 'flazm_ruby_helpers/class'
 
 # This will be a module to store previous consul watch json to compare with previous watch data
 module ConsulWatcher
   module Storage
     # Consul storage for previous watch data
     class Consul
-      include ClassHelper
+      include FlazmRubyHelpers::Class
 
       def initialize(storage_config)
-        populate_variables(storage_config)
+        initialize_variables(storage_config)
         config_diplomat
       end
 
       def fetch
         @logger.debug('fetching state from consul')
         data = Diplomat::Kv.get(cache_file_name)
-        data = Zlib::Inflate.inflate(data) if @encrypt
+        data = Zlib::Inflate.inflate(data) if @compress
         data
       rescue Diplomat::KeyNotFound
         '{}'
@@ -27,7 +27,7 @@ module ConsulWatcher
 
       def push(data)
         @logger.debug('pushing state to consul')
-        Diplomat::Kv.put(cache_file_name, @encrypt ? Zlib::Deflate.deflate(data, Zlib::BEST_COMPRESSION) : data)
+        Diplomat::Kv.put(cache_file_name, @compress ? Zlib::Deflate.deflate(data, Zlib::BEST_COMPRESSION) : data)
       end
 
       def get_filters
@@ -58,7 +58,7 @@ module ConsulWatcher
           parent_dir: 'watch/json-store',
           consul_http_addr: 'http://localhost:8500',
           consul_token: nil,
-          encrypt: false
+          compress: false
         }
       end
     end

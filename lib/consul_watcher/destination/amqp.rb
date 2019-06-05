@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 require 'bunny'
-require 'consul_watcher/class_helper'
 require 'json'
+require 'flazm_ruby_helpers/class'
 
 module ConsulWatcher
   module Destination
     # Send diff output to jq command line
     class Amqp
-      include ClassHelper
+      include FlazmRubyHelpers::Class
 
       def initialize(destination_config)
-        populate_variables(destination_config)
+        initialize_variables(destination_config)
         setup_rabbitmq
       end
 

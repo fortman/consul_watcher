@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 require 'base64'
-require 'consul_watcher/class_helper'
+require 'flazm_ruby_helpers/class'
 
 module ConsulWatcher
   module WatchType
     class Key
-      include ClassHelper
+      include FlazmRubyHelpers::Class
 
       attr_accessor :filters
       def initialize(watch_config)
-        populate_variables(watch_config)
+        initialize_variables(watch_config)
       end
 
       def get_changes(previous_watch_json, current_watch_json)
@@ -22,7 +22,6 @@ module ConsulWatcher
           formatted_change
         end.compact
         changes = changes.each.collect.reject {|change| @filters.filter?(change)}
-        puts "size: #{changes.size}"
         changes
       end
 
@@ -38,7 +37,7 @@ module ConsulWatcher
       end
 
       def decode(change)
-        return unless change['element'] == 'Value'
+        return unless change['key_property'] == 'Value'
 
         change['old_value'] = Base64.decode64(change['old_value']) if change['old_value'].is_a? String
         change['new_value'] = Base64.decode64(change['new_value']) if change['new_value'].is_a? String

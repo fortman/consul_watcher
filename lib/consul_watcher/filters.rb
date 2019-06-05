@@ -1,17 +1,18 @@
 # frozen_string_literal: true
 
-require 'consul_watcher/class_helper'
+require 'flazm_ruby_helpers/class'
+require 'flazm_ruby_helpers/data_structures'
 
 module ConsulWatcher
   class Filters
-    include ClassHelper
+    include FlazmRubyHelpers::Class
 
     def initialize(filter_config)
-      populate_variables(filter_config)
+      initialize_variables(filter_config)
     end
 
     def add_filters(filters_to_add)
-      @filters = @filters.deep_merge(filters_to_add)
+      @filters = @filters.deep_merge(filters_to_add) unless filters_to_add.nil?
     end
 
     def filter?(change)
