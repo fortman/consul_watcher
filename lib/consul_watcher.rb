@@ -19,7 +19,7 @@ module ConsulWatcher
       @destination.send(change)
     end
     logger.info("Processed #{changes.size} change#{'s' unless changes.size == 1}")
-    @storage.push(current_watch_json) unless changes.empty?
+    @storage.push(current_watch_json)
   end
 
   private
