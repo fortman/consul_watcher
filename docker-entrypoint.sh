@@ -8,6 +8,8 @@ echo "CLI_ARGS: \"${@}\""
 echo "WATCH_ARGS: \"${WATCH_ARGS}\""
 echo "WATCH_SCRIPT: \"${WATCH_SCRIPT}\""
 echo "CONSUL_HTTP_ADDR: \"${CONSUL_HTTP_ADDR}\""
+export CONSUL_DC="$(curl ${CONSUL_HTTP_ADDR}/v1/agent/self | jq -r '.Config.Datacenter')"
+echo "CONSUL_DC: \"${CONSUL_DC}\""
 echo "RUN_ONCE: \"${RUN_ONCE}\""
 if [[ ${#} != 0 ]]; then
   exec $@

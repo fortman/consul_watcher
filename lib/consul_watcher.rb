@@ -9,12 +9,13 @@ require 'consul_watcher/filters'
 # Top Level module to run watch logic
 module ConsulWatcher
   def self.watch(config)
+    dc = ENV['CONSUL_DC']
     logger = Logger.new(STDOUT)
     logger.level = Logger::INFO
     assemble(config)
     current_watch_json = $stdin.read
     previous_watch_json = @storage.fetch
-    changes = @watch_type.get_changes(previous_watch_json, current_watch_json)
+    changes = @watch_type.get_changes(previous_watch_json, current_watch_json, dc)
     changes.each do |change|
       @destination.send(change)
     end

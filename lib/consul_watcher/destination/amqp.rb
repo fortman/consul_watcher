@@ -12,32 +12,32 @@ module ConsulWatcher
 
       def initialize(destination_config)
         initialize_variables(destination_config)
-        setup_rabbitmq
+        setup_amqp
       end
 
-      def setup_rabbitmq
-        @conn = Bunny.new(rabbitmq_opts)
+      def setup_amqp
+        @conn = Bunny.new(amqp_opts)
         @conn.start
         @ch = @conn.create_channel
         @ex = Bunny::Exchange.new(@ch,
                                   :topic,
-                                  @rabbitmq_exchange,
+                                  @amqp_exchange,
                                   durable: true)
       end
 
-      def rabbitmq_opts
+      def amqp_opts
         opts = {}
-        opts[:vhost] = @rabbitmq_vhost
-        opts[:username] = @rabbitmq_username
-        opts[:password] = @rabbitmq_password
-        if @rabbitmq_addresses
-          opts[:addresses] = @rabbitmq_addresses
-        elsif @rabbitmq_hosts
-          opts[:hosts] = @rabbitmq_hosts
-          opts[:port] = @rabbitmq_port if @rabbitmq_port
-        elsif @rabbitmq_host
-          opts[:host] = @rabbitmq_host
-          opts[:port] = @rabbitmq_port if @rabbitmq_port
+        opts[:vhost] = @amqp_vhost
+        opts[:username] = @amqp_username
+        opts[:password] = @amqp_password
+        if @amqp_addresses
+          opts[:addresses] = @amqp_addresses
+        elsif @amqp_hosts
+          opts[:hosts] = @amqp_hosts
+          opts[:port] = @amqp_port if @amqp_port
+        elsif @amqp_host
+          opts[:host] = @amqp_host
+          opts[:port] = @amqp_port if @amqp_port
         end
         opts
       end
@@ -60,14 +60,14 @@ module ConsulWatcher
         logger.level = Logger::DEBUG
         {
           logger: logger,
-          rabbitmq_host: nil,
-          rabbitmq_hosts: nil,
-          rabbitmq_addresses: nil,
-          rabbitmq_port: '5672',
-          rabbitmq_vhost: '/',
-          rabbitmq_username: 'guest',
-          rabbitmq_password: 'guest',
-          rabbitmq_exchange: 'amq.topic'
+          amqp_host: nil,
+          amqp_hosts: nil,
+          amqp_addresses: nil,
+          amqp_port: '5672',
+          amqp_vhost: '/',
+          amqp_username: 'guest',
+          amqp_password: 'guest',
+          amqp_exchange: 'amq.topic'
         }
       end
     end

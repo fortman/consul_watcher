@@ -9,7 +9,7 @@ require 'json'
 
 module ConsulWatcher
   module RakeHelper
-    def self.config_rabbitmq
+    def self.config_amqp
       conn = Bunny.new(host: 'localhost', port: '5672', vhost: '/', \
                        username: 'guest', password: 'guest')
       conn.start

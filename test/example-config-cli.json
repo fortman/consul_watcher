@@ -12,6 +12,6 @@
   },
   "destination": {
     "classname": "ConsulWatcher::Destination::Amqp",
-    "rabbitmq_host": "localhost"
+    "amqp_host": "localhost"
   }
 }

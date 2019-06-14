@@ -2,6 +2,7 @@
 
 require 'base64'
 require 'flazm_ruby_helpers/class'
+require 'diplomat'
 
 module ConsulWatcher
   module WatchType
@@ -13,11 +14,11 @@ module ConsulWatcher
         initialize_variables(watch_config)
       end
 
-      def get_changes(previous_watch_json, current_watch_json)
+      def get_changes(previous_watch_json, current_watch_json, dc)
         json_diff = get_diff(previous_watch_json, current_watch_json)
 
         changes = json_diff.each.collect do |change|
-          formatted_change = format_change('key', change)
+          formatted_change = format_change('key', change, dc)
           decode(formatted_change) if @decode_values
           formatted_change
         end.compact
@@ -52,10 +53,11 @@ module ConsulWatcher
         end.reduce({}, :merge)
       end
 
-      def format_change(watch_type, change)
+      def format_change(watch_type, change, dc)
         old_value, new_value = change_values(change)
         {
           'id' => "consul_watcher.key.#{change[1][0].tr('/', '.')}",
+          'consul_dc' => dc,
           'watch_type' => watch_type,
           'key_path' =>  change[1][0],
           'key_property' => change[1][1],

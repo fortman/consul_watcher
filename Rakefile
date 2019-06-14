@@ -37,7 +37,7 @@ task up: [:start_deps] do
 end
 
 task :consume do
-  ConsulWatcher::RakeHelper.config_rabbitmq
+  ConsulWatcher::RakeHelper.config_amqp
   puts 'Starting queue consumer'
   ConsulWatcher::RakeHelper.consumer_start
 end
