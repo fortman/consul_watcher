@@ -44,14 +44,14 @@ module ConsulWatcher
 
       def send(change)
         @logger.debug('publishing message')
-        routing_key = change['id']
+        routing_key = change['id'].truncate(255, omission: '.truncated')
         @logger.debug("routing_key: #{routing_key}")
         begin
-          @ex.publish(JSON.pretty_generate(change), routing_key: change['id'])
+          @ex.publish(JSON.pretty_generate(change), routing_key: routing_key)
         rescue Encoding::UndefinedConversionError
           change['forced_utf8'] = true
           data = change.to_s.encode('UTF-8', invalid: :replace, undef: :replace, replace: '?')
-          @ex.publish(JSON.pretty_generate(data), routing_key: change['id'])
+          @ex.publish(JSON.pretty_generate(data), routing_key: routing_key)
         end
       end
 
