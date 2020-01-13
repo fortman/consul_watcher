@@ -44,7 +44,7 @@ module ConsulWatcher
 
       def send(change)
         @logger.debug('publishing message')
-        routing_key = change['id'].truncate(255, omission: '.truncated')
+        routing_key = change['id'].length > 255 ? "#{change['id'][0..244]}.truncated" : change['id']
         @logger.debug("routing_key: #{routing_key}")
         begin
           @ex.publish(JSON.pretty_generate(change), routing_key: routing_key)
